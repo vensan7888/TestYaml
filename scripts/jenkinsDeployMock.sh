@@ -30,11 +30,14 @@ fi
 
 finalStatus="["
 for file in "${YAML_FILE_PATHS[@]}"; do
-    filePath=$FOLDER_PATH/$file
-    echo $filePath
-    # Return status of all endpoints in a given yaml file.
-    status=$(sh "$COMMON_PATH"/yamlParser.sh $filePath $MOCK_SERVER)
-    finalStatus="$finalStatus $status,"
+  if [ "$SCAN_FULL_DIRECTORY" = "y" ] || [ "$SCAN_FULL_DIRECTORY" = "Y" ]; then
+    filePath=$file
+  else
+    filePath="$CURRENT_DIRECTORY/$file"
+  fi
+  # Return status of all endpoints in a given yaml file.
+  status=$(sh "$COMMON_PATH"/yamlParser.sh $filePath $MOCK_SERVER)
+  finalStatus="$finalStatus $status,"
 done
 finalStatus="$finalStatus]"
 echo $finalStatus
