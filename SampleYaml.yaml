@@ -12,7 +12,7 @@ servers:
     description: Local development server
 
 paths:
-  /testLatest2:
+  /testLatest3:
     post:
       summary: Post all test
       requestBody:
