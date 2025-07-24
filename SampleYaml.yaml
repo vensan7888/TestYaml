@@ -1,0 +1,79 @@
+
+openapi: 3.0.3
+info:
+  title: User Service API
+  description: API for user authentication and profile management
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: http://localhost:8080/v1
+    description: Local development server
+
+paths:
+  /testLatest:
+    post:
+      summary: Post all test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Test'
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+components:
+  schemas:
+    Test:
+      type: object
+      properties:
+        name:
+          type: string
+        age:
+          type: integer
+        salary:
+          type: number
+        male:
+          type: boolean
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        residant:
+          type: boolean
+        salary:
+          type: integer
+        salary2:
+          type: number
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            house:
+              type: string
+            state:
+              type: string
+            nriAddress:
+              type: object
+              properties:
+                street:
+                  type: string
+                house:
+                  type: string
+                state:
+                  type: string
