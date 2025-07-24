@@ -4,7 +4,10 @@
 # Full Command:
 # 
 #   To Clone Repo & Scan all Yaml files to deploy contracts to mock server
-#     ex: sh scripts/deployMockFromDirectory.sh http://localhost:8080
+#     ex: sh scripts/jenkinsDeployMock.sh http://localhost:8080 y
+#
+#   To Clone Repo & Scan all Yaml files to deploy contracts to mock server
+#     ex: sh scripts/jenkinsDeployMock.sh http://localhost:8080
 
 MOCK_SERVER=$1
 SCAN_FULL_DIRECTORY=$2
