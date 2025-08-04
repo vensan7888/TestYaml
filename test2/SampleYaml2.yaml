@@ -12,7 +12,7 @@ servers:
     description: Local development server
 
 paths:
-  /fetchcatalog:
+  /fetchcatalogV1:
     post:
       summary: Fetch Product catalog
       requestBody:
@@ -30,7 +30,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CatalogResponse'
-  /fetchcatalog2:
+  /fetchcatalog2V2:
     post:
       summary: Fetch Product catalog
       requestBody:
