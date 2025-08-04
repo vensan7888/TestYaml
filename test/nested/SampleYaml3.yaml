@@ -2,7 +2,7 @@
 openapi: 3.0.3
 info:
   title: User Service API
-  description: API for user authentication and profile management
+  description: API for user authentication and profile management3
   version: 1.0.0
 
 servers:
