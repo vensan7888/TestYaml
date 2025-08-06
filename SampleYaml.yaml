@@ -33,7 +33,7 @@ components:
       type: object
       properties:
         currentPage:
-          type: integer
+          type: string
     CatalogResponse:
       type: object
       properties:
