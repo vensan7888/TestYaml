@@ -14,6 +14,16 @@ get_default_value() {
     *) echo 'null' ;;
   esac
 }
+# Function to return example values based on type
+get_example_format_value() {
+  case "$1" in
+    string) echo '"%s"\n' "$2" ;;
+    boolean) echo $2 ;;
+    integer) echo $2 ;;
+    number) echo $2 ;;
+    *) echo 'null' ;;
+  esac
+}
 # $1 base query, $2 object type array/object
 generateJson() {
     if [ "$2" = "array" ]; then
@@ -28,12 +38,11 @@ generateJson() {
 
     properties=$(yq eval "$propertyBaseQuery.properties | keys | .[]" $FILE)
     parameterObject=$(yq "$propertyBaseQuery.properties" $FILE)
-    #echo "Properties : $properties"
-    #echo "Property Object : $parameterObject"
     for property in $properties; do
         key=$property
         type=$(yq "$propertyBaseQuery.properties.$property.type" $FILE)
-        #echo "DataType $key And $type End.."
+        # Default value while configuring contract mock.
+        example=$(yq "$propertyBaseQuery.properties.$property.example" $FILE)
         value=""
         if [ $type = "object" ] || [ $type = "array" ]; then
             newQuery="$propertyBaseQuery.properties.$property"
@@ -41,6 +50,9 @@ generateJson() {
             value=$nestedObject
         else
             value=$(get_default_value $type)
+            if [ -n "$example" ]; then
+                value=$(get_example_format_value $type $example)
+            fi
         fi
         if [ $first -eq 1 ]; then
             jsonString="$jsonString\"$key\": $value"
@@ -69,8 +81,6 @@ generateRequestStructure() {
     schemas=$2
     name=$3
    
-#    jsonString="{"
-#    first=1
     propertyBaseQuery=".$components.""$schemas.$name"
     json=$(generateJson $propertyBaseQuery $type)
     echo $json
@@ -79,17 +89,24 @@ generateRequestStructure() {
 deployMock() {
     url="$HOST_URL/deployContract"
     response="$3"
-    
-    #echo ""    
-    #echo "Start:::"
     json=$(printf '{"endpoint": "%s", "request": %s, "response": %s}' "$1" "$2" "$response")
-    hostResponse=$(curl -X POST "$url" \
+    hostResponse=$(curl -s -w "\n%{http_code}" \
+                        -X POST "$url" \
                         -H "Content-Type: application/json" \
-                        -d "$json") 
-    #echo ""
-    #echo "End:::"
-    #echo ""
-    echo $hostResponse
+                        -d "$json")
+    # Separate body and status
+    response_body=$(echo "$hostResponse" | sed '$d')
+    response_status=$(echo "$hostResponse" | tail -n1)
+    # Check the status code
+    if [ "$response_status" -eq 200 ]; then
+        echo $response_body
+    else
+        echo "❌ Failed with HTTP status $response_status"
+        echo ""
+        echo "Error details: $response_body"
+        echo ""
+        exit 1
+    fi
 }
 
 for path in $paths; do
@@ -120,20 +137,14 @@ for path in $paths; do
     fi
 
     reqStructure=$(generateRequestStructure "$requestStructurePath" "object")
+    #echo "reqStructure == $reqStructure"
     cleanedPath="${path#/}"
-    #echo "Clean path:: $cleanedPath"
-    #echo "Request Structure of $path:"
-    #echo "$reqStructure"
-    #echo ""
-    #echo "Response Type:: $responseType $responseStructurePath"
-    #echo "Response Structure:"
     responseStructure=$(generateRequestStructure $responseStructurePath $responseType)
-    #echo "$responseStructure"
-    #echo ""
+    #echo "responseStructure == $responseStructure"
     deployedResponse=$(deployMock $cleanedPath "$reqStructure" "$responseStructure")
-    #echo $deployedResponse
     if [ -z "$deployedResponse" ]; then
         deployedResponse="Failed to deploy!!!"
+        exit 1
     fi
     finalStatus="{"$path" : "$deployedResponse"}"
   done

@@ -34,27 +34,37 @@ components:
       properties:
         currentPage:
           type: integer
+          example: 0
     CatalogResponse:
       type: object
       properties:
         hasMore:
           type: boolean
+          example: false
         products:
           type: array
           properties:
             id:
               type: string
+              example: "1"
             imageUrl:
               type: string
+              example: "https://m.media-amazon.com/images/I/71oQg+Gaw2L._AC_UL640_FMwebp_QL65_.jpg"
             title:
               type: string
+              example: "Product Title"
             description:
               type: string
+              example: "Product Description"
             inStock:
               type: boolean
+              example: true
             rating:
               type: number
+              example: 5.0
             price:
               type: number
+              example: 12.0
             currency:
               type: string
+              example: "$"
