@@ -136,7 +136,13 @@ for path in $paths; do
     #echo "reqStructure == $reqStructure"
     cleanedPath="${path#/}"
     responseStructure=$(generateRequestStructure $responseStructurePath $responseType)
-    #echo "responseStructure == $responseStructure"
+
+    # In case if response is empty for 200 http status
+    if [ $responseStructure = "{}" ]; then
+        echo "<HttpStatus '200' is missing in responses of $FILE, As of now smart-mock supports only HttpStatus = '200' & HttpMethod = 'POST'>"
+        exit 1
+    fi
+
     deployedResponse=$(deployMock $cleanedPath "$reqStructure" "$responseStructure")
 
     read -r hostStatusCode _ <<< "$deployedResponse"
