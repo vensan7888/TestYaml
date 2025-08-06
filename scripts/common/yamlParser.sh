@@ -144,6 +144,13 @@ for path in $paths; do
         echo $deployedResponse #="Failed to deploy!!!"
         exit 1
     fi
+
+    if ! echo "$deployedResponse" | grep -q "requestStructure"; then
+        # In case if smart-mock responds with error then fail the jenkins job!
+        echo $deployedResponse
+        exit 1
+    fi
+
     finalStatus="{"$path" : "$deployedResponse"}"
   done
   finalStatus="$finalStatus]"

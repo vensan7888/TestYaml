@@ -68,7 +68,7 @@ while IFS= read -r path; do
     read -r hostStatusCode _ <<< "$status"
     if [ -z "$status" ] || [ "$hostStatusCode" = "<400>" ]; then
       matches=$(echo "$status" | grep -o '<[^>]*>')
-      # Extract JSON and host response
+      # Extract JSON and host response fail Jenkins job incase of status code '400'
       response_status=$(echo "$matches" | sed -n '1p' | sed 's/[<>]//g')
       request_data=$(echo "$matches" | sed -n '2p' | sed 's/[<>]//g')
       response_data=$(echo "$matches" | sed -n '3p' | sed 's/[<>]//g')
@@ -81,10 +81,18 @@ while IFS= read -r path; do
       echo ""
       exit 1
     fi
-    # On Successful API deployment to smart-mock
+
     echo ""
     echo "Status: $status"
     echo ""
+
+    if ! echo "$status" | grep -q "requestStructure"; then
+      # In case if smart-mock responds with error then fail the jenkins job!
+      echo "Failed to deploy!!!"
+      echo ""
+      exit 1
+    fi
+
   fi
   counter=$((counter + 1))
 done <<EOF
