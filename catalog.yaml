@@ -58,7 +58,7 @@ components:
               example: "Product Description"
             inStock:
               type: boolean
-              example: true
+              example: "true"
             rating:
               type: number
               example: 5.0
