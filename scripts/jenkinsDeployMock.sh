@@ -48,9 +48,9 @@ else
   fi
   echo ""
 fi
-status=""
+
 counter=1
-echo "$YAML_FILE_PATHS" | while IFS= read -r path; do
+while IFS= read -r path; do
   file=$path;
   if [ "$SCAN_FULL_DIRECTORY" = "y" ] || [ "$SCAN_FULL_DIRECTORY" = "Y" ]; then
     filePath=$file
@@ -68,20 +68,16 @@ echo "$YAML_FILE_PATHS" | while IFS= read -r path; do
     echo "Status: $status"
     echo ""
 
-    if [ -z "$status" ] || [ $status = 400 ]; then
+    if [ -z "$status" ] || [ "$status" = 400 ]; then
+      echo "Failed to deploy!!!"
       exit 1
     fi
 
   fi
   counter=$((counter + 1))
-done
-
-if [ -z "$status" ] || [ $status = 400 ]; then
-  echo "Failed to deploy!!!"
-  exit 1
-else
-  exit 0
-fi
+done <<EOF
+$YAML_FILE_PATHS
+EOF
 
 
 
