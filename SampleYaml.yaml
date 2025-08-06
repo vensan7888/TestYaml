@@ -16,39 +16,17 @@ paths:
     post:
       summary: Fetch Product catalog
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CatalogRequest'
       responses:
         '200':
-          description: List of users
+          description: List of products
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CatalogResponse'
-  /fetchcatalog2:
-    post:
-      summary: Fetch Product catalog
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CatalogRequest'
-      responses:
-        '200':
-          description: List of users
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CatalogResponse'
-
+                $ref: '#/components/schemas/CatalogResponse'
 components:
   schemas:
     CatalogRequest:
@@ -57,21 +35,26 @@ components:
         currentPage:
           type: integer
     CatalogResponse:
-      type: array
+      type: object
       properties:
-        id:
-          type: integer
-        imageUrl:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        inStock:
-          type: string
-        rating:
-          type: number
-        price:
-          type: number
-        currency:
-          type: string
+        hasMore:
+          type: boolean
+        products:
+          type: array
+          properties:
+            id:
+              type: integer
+            imageUrl:
+              type: string
+            title:
+              type: string
+            description:
+              type: string
+            inStock:
+              type: boolean
+            rating:
+              type: number
+            price:
+              type: number
+            currency:
+              type: string
