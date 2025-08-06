@@ -17,7 +17,7 @@ get_default_value() {
 # Function to return example values based on type
 get_example_format_value() {
   case "$1" in
-    string) echo '"%s"\n' "$2" ;;
+    string) printf '"%s"\n' "$2" ;;
     boolean) echo $2 ;;
     integer) echo $2 ;;
     number) echo $2 ;;
@@ -101,7 +101,7 @@ deployMock() {
     if [ "$response_status" -eq 200 ]; then
         echo $response_body
     else
-        echo $response_status
+        echo "<$response_status> <$json> <$response_body>"
     fi
 }
 
@@ -138,7 +138,9 @@ for path in $paths; do
     responseStructure=$(generateRequestStructure $responseStructurePath $responseType)
     #echo "responseStructure == $responseStructure"
     deployedResponse=$(deployMock $cleanedPath "$reqStructure" "$responseStructure")
-    if [ -z "$deployedResponse" ] || [ $deployedResponse = 400 ]; then
+
+    read -r hostStatusCode _ <<< "$deployedResponse"
+    if [ -z "$deployedResponse" ] || [ $hostStatusCode = "<400>" ]; then
         echo $deployedResponse #="Failed to deploy!!!"
         exit 1
     fi

@@ -64,15 +64,27 @@ while IFS= read -r path; do
     echo ""
     # Return status of all endpoints in a given yaml file.
     status=$(sh "$COMMON_PATH"/yamlParser.sh $filePath $MOCK_SERVER)
+    
+    read -r hostStatusCode _ <<< "$status"
+    if [ -z "$status" ] || [ "$hostStatusCode" = "<400>" ]; then
+      matches=$(echo "$status" | grep -o '<[^>]*>')
+      # Extract JSON and host response
+      response_status=$(echo "$matches" | sed -n '1p' | sed 's/[<>]//g')
+      request_data=$(echo "$matches" | sed -n '2p' | sed 's/[<>]//g')
+      response_data=$(echo "$matches" | sed -n '3p' | sed 's/[<>]//g')
+      echo ""
+      echo "🔹 Tried to deploy: $request_data"
+      echo ""
+      echo "🔹 Received: $response_data"
+      echo ""
+      echo "Failed to deploy!!!"
+      echo ""
+      exit 1
+    fi
+    # On Successful API deployment to smart-mock
     echo ""
     echo "Status: $status"
     echo ""
-
-    if [ -z "$status" ] || [ "$status" = 400 ]; then
-      echo "Failed to deploy!!!"
-      exit 1
-    fi
-
   fi
   counter=$((counter + 1))
 done <<EOF
