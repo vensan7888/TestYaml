@@ -101,11 +101,7 @@ deployMock() {
     if [ "$response_status" -eq 200 ]; then
         echo $response_body
     else
-        echo "❌ Failed with HTTP status $response_status"
-        echo ""
-        echo "Error details: $response_body"
-        echo ""
-        exit 1
+        echo $response_status
     fi
 }
 
@@ -142,8 +138,8 @@ for path in $paths; do
     responseStructure=$(generateRequestStructure $responseStructurePath $responseType)
     #echo "responseStructure == $responseStructure"
     deployedResponse=$(deployMock $cleanedPath "$reqStructure" "$responseStructure")
-    if [ -z "$deployedResponse" ]; then
-        deployedResponse="Failed to deploy!!!"
+    if [ -z "$deployedResponse" ] || [ $deployedResponse = 400 ]; then
+        echo $deployedResponse #="Failed to deploy!!!"
         exit 1
     fi
     finalStatus="{"$path" : "$deployedResponse"}"

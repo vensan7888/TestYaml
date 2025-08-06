@@ -67,6 +67,11 @@ echo "$YAML_FILE_PATHS" | while IFS= read -r path; do
     echo ""
     echo "Status: $status"
     echo ""
+
+     if [ -z "$status" ] || [ $status = 400 ]; then
+        echo "Failed to deploy!!!"
+        exit 2
+    fi
   fi
   counter=$((counter + 1))
 done
