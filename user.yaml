@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: User Onboarding API
+  version: 1.0.0
+  description: API endpoint to onboard/register a new user.
+
+servers:
+  - url: https://api.example.com
+
+paths:
+  /user/onboard:
+    post:
+      summary: Onboard a new user
+      description: Creates a user account in the system.
+      operationId: onboardUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserOnboardRequest'
+      responses:
+        '201':
+          description: User onboarded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOnboardResponse'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    UserOnboardRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - phone
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john@example.com
+        password:
+          type: string
+          format: password
+          example: p@ssw0rd
+        phone:
+          type: string
+          example: "+1-202-555-0184"
+
+    UserOnboardResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "a12345"
+        message:
+          type: string
+          example: "User created successfully."
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Something went wrong."
+        code:
+          type: integer
+          example: 400
