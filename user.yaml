@@ -26,34 +26,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserOnboardResponse'
-        '400':
-          description: Invalid request body
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
 components:
   schemas:
     UserOnboardRequest:
       type: object
-      required:
-        - name
-        - email
-        - password
-        - phone
       properties:
         name:
           type: string
@@ -79,13 +55,3 @@ components:
         message:
           type: string
           example: "User created successfully."
-
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          example: "Something went wrong."
-        code:
-          type: integer
-          example: 400
