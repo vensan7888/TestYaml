@@ -15,8 +15,8 @@ MOCK_SYSTEM="SMART-MOCK"
 
 CURRENT_DIRECTORY=$(pwd)
 dir=$(dirname "$0")"/"
-SCRIPT_PATH=$dir
-COMMON_PATH="$CURRENT_DIRECTORY/$SCRIPT_PATH/common"
+SCRIPT_PATH="$CURRENT_DIRECTORY/$dir"
+COMMON_PATH="$SCRIPT_PATH""common"
 
 # 2. Scan repo
 if [ "$SCAN_FULL_DIRECTORY" = "y" ] || [ "$SCAN_FULL_DIRECTORY" = "Y" ]; then
@@ -68,6 +68,7 @@ while IFS= read -r path; do
     read -r hostStatusCode _ <<< "$status"
     if [ -z "$status" ] || [ "$hostStatusCode" = "<400>" ]; then
       matches=$(echo "$status" | grep -o '<[^>]*>')
+      # *** ERROR ***
       # Extract JSON and host response fail Jenkins job incase of status code '400'
       response_status=$(echo "$matches" | sed -n '1p' | sed 's/[<>]//g')
       request_data=$(echo "$matches" | sed -n '2p' | sed 's/[<>]//g')
@@ -87,6 +88,7 @@ while IFS= read -r path; do
     echo ""
 
     if ! echo "$status" | grep -q "requestStructure"; then
+      # *** ERROR ***
       # In case if smart-mock responds with error then fail the jenkins job!
       echo "Failed to deploy!!!"
       echo ""

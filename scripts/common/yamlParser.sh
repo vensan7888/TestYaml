@@ -137,8 +137,9 @@ for path in $paths; do
     cleanedPath="${path#/}"
     responseStructure=$(generateRequestStructure $responseStructurePath $responseType)
 
-    # In case if response is empty for 200 http status
-    if [ $responseStructure = "{}" ]; then
+    # In case if no response is configured for 200 http status.
+    if [ "$responseStructure" = "{}" ]; then
+        # *** ERROR ***
         echo "<HttpStatus '200' is missing in responses of $FILE, As of now smart-mock supports only HttpStatus = '200' & HttpMethod = 'POST'>"
         exit 1
     fi
@@ -147,12 +148,13 @@ for path in $paths; do
 
     read -r hostStatusCode _ <<< "$deployedResponse"
     if [ -z "$deployedResponse" ] || [ $hostStatusCode = "<400>" ]; then
+        # *** ERROR ***
         echo $deployedResponse #="Failed to deploy!!!"
         exit 1
     fi
 
     if ! echo "$deployedResponse" | grep -q "requestStructure"; then
-        # In case if smart-mock responds with error then fail the jenkins job!
+        # *** ERROR *** In case if smart-mock responds with error then fail the jenkins job!
         echo $deployedResponse
         exit 1
     fi
