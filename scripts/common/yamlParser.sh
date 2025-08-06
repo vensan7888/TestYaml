@@ -17,7 +17,7 @@ get_default_value() {
 # Function to return example values based on type
 get_example_format_value() {
   case "$1" in
-    string) printf '"%s"\n' "$2" ;;
+    string) echo '"%s"\n' "$2" ;;
     boolean) echo $2 ;;
     integer) echo $2 ;;
     number) echo $2 ;;
