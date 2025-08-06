@@ -46,7 +46,7 @@ components:
           properties:
             id:
               type: string
-              example: "1"
+              example: 1
             imageUrl:
               type: string
               example: "https://m.media-amazon.com/images/I/71oQg+Gaw2L._AC_UL640_FMwebp_QL65_.jpg"
