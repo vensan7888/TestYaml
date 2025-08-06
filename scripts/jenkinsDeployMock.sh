@@ -48,7 +48,7 @@ else
   fi
   echo ""
 fi
-
+status=""
 counter=1
 echo "$YAML_FILE_PATHS" | while IFS= read -r path; do
   file=$path;
@@ -76,6 +76,12 @@ echo "$YAML_FILE_PATHS" | while IFS= read -r path; do
   counter=$((counter + 1))
 done
 
-exit 0
+if [ -z "$status" ] || [ $status = 400 ]; then
+  echo "Failed to deploy!!!"
+  exit 1
+else
+  exit 0
+fi
+
 
 
