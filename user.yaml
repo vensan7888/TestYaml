@@ -33,18 +33,18 @@ components:
       properties:
         name:
           type: string
-          example: John Doe
+          example: Sandeep Kumar
         email:
           type: string
           format: email
-          example: john@example.com
+          example: sandeep@example.com
         password:
           type: string
           format: password
           example: p@ssw0rd
         phone:
           type: string
-          example: "+1-202-555-0184"
+          example: "+910009929290"
 
     UserOnboardResponse:
       type: object
