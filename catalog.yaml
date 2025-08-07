@@ -32,8 +32,8 @@ components:
       type: object
       properties:
         currentPage:
-          type: integer
-          example: 0
+          type: string
+          example: "0"
     CatalogResponse:
       type: object
       properties:
@@ -44,7 +44,7 @@ components:
           type: array
           properties:
             id:
-              type: string
+              type: integer
               example: 1
             imageUrl:
               type: string
@@ -57,7 +57,7 @@ components:
               example: "Product Description"
             inStock:
               type: boolean
-              example: "false"
+              example: false
             rating:
               type: number
               example: 5.0
