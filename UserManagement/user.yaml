@@ -1,0 +1,57 @@
+openapi: 3.0.3
+info:
+  title: User Onboarding API
+  version: 1.0.0
+  description: API endpoint to onboard/register a new user.
+
+servers:
+  - url: https://api.example.com
+
+paths:
+  /user/onboard:
+    post:
+      summary: Onboard a new user
+      description: Creates a user account in the system.
+      operationId: onboardUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserOnboardRequest'
+      responses:
+        '200':
+          description: User onboarded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOnboardResponse'
+components:
+  schemas:
+    UserOnboardRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Sandeep Kumar
+        email:
+          type: string
+          format: email
+          example: sandeep@example.com
+        password:
+          type: string
+          format: password
+          example: p@ssw0rd
+        phone:
+          type: string
+          example: "+910009929290"
+
+    UserOnboardResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: "a12345"
+        message:
+          type: string
+          example: "User created successfully."
