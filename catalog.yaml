@@ -1,0 +1,69 @@
+openapi: 3.0.3
+info:
+  title: User Service API
+  description: API for user authentication and profile management00
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: http://localhost:8080/v1
+    description: Local development server
+
+paths:
+  /fetchcatalog:
+    post:
+      summary: Fetch Product catalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CatalogRequest'
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogResponse'
+components:
+  schemas:
+    CatalogRequest:
+      type: object
+      properties:
+        currentPage:
+          type: string
+          example: "0"
+    CatalogResponse:
+      type: object
+      properties:
+        hasMore:
+          type: boolean
+          example: false
+        products:
+          type: array
+          properties:
+            id:
+              type: integer
+              example: 1
+            imageUrl:
+              type: string
+              example: "https://m.media-amazon.com/images/I/71oQg+Gaw2L._AC_UL640_FMwebp_QL65_.jpg"
+            title:
+              type: string
+              example: "Product Title"
+            description:
+              type: string
+              example: "Product Description"
+            inStock:
+              type: boolean
+              example: false
+            rating:
+              type: number
+              example: 5.0
+            price:
+              type: number
+              example: 12.0
+            currency:
+              type: string
+              example: "$"
