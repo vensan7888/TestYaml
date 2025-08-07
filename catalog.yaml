@@ -32,8 +32,8 @@ components:
       type: object
       properties:
         currentPage:
-          type: string
-          example: "0"
+          type: integer
+          example: 0
     CatalogResponse:
       type: object
       properties:
@@ -44,8 +44,8 @@ components:
           type: array
           properties:
             id:
-              type: integer
-              example: 1
+              type: string
+              example: "1"
             imageUrl:
               type: string
               example: "https://m.media-amazon.com/images/I/71oQg+Gaw2L._AC_UL640_FMwebp_QL65_.jpg"
